@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:context="http://www.springframework.org/schema/context" 
+xmlns:mvc="http://www.springframework.org/schema/mvc" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd 
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd ">
+	
+	<!-- 扫描注解 
+		 首先通过exclude-filter 进行黑名单过滤；排除扫描。
+		然后通过include-filter 进行白名单过滤；扫描
+		否则默认排除。-->
+	<context:annotation-config/>
+	<context:component-scan base-package="com.demo">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	</context:component-scan>
+	<!-- 解析文件的路径 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" lazy-init="false">
+		<property name="locations">
+			<list>
+				<value>classpath:datasource.properties</value>
+				<value>classpath:redis.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+		  <!--配置数据源 这里是使用的是c3p0连接池   destroy-method="close"-->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}"></property><!--数据库连接驱动-->
+		<property name="jdbcUrl" value="${jdbc.url}"></property>  <!--数据库地址-->
+		<property name="user" value="${jdbc.username}"></property>   <!--用户名-->
+		<property name="password" value="${jdbc.password}"></property> <!--密码-->
+		<property name="maxPoolSize" value="40"></property> <!--最大连接数-->
+		<property name="minPoolSize" value="1"></property><!--最小连接数-->
+		<property name="initialPoolSize" value="10"></property><!--初始化连接池内的数据库连接-->
+		<property name="maxIdleTime" value="20"></property><!--最大空闲时间-->
+	</bean>
+	
+	<!-- 配置session工厂 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.demo.entity</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop><!--指定数据库方言-->
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop><!--在控制台显示执行的数据库操作语句-->
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop><!--在控制台显示执行的数据哭操作语句（格式）-->
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop><!--hibernate根据实体自动生成数据库表-->
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop><!-- 开启缓存 -->
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop><!-- 因为一般而言，查询缓存的命中率并不是很高，所以我们没有必要为每个用户的查询缓存他的数据。 -->
+				<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop><!-- 指定使用缓存产品的驱动类 -->
+				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
+            	<prop key="hibernate.current_session_context_class">org.springframework.orm.hibernate4.SpringSessionContext</prop>
+			</props>
+		</property>
+	</bean>
+	
+	   <!-- 事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+<!--     配置切面  -->
+<!--      <tx:advice id="chatAdvice" transaction-manager="transactionManager"> -->
+<!--         <tx:attributes> -->
+<!--             <tx:method name="find*" propagation="SUPPORTS" read-only="true" /> -->
+<!--             <tx:method name="get*" propagation="SUPPORTS" read-only="true" /> -->
+<!--             <tx:method name="select*"  propagation="SUPPORTS" read-only="true"/> -->
+<!--             <tx:method name="check*" propagation="SUPPORTS" read-only="true"/> -->
+<!--             <tx:method name="*" propagation="REQUIRED" read-only="false" />          -->
+<!--         </tx:attributes> -->
+<!--     </tx:advice>  -->
+
+<!--     切点、通知配置   -->
+<!--      <aop:config>  -->
+<!--         <aop:pointcut id="allManagerMethod" expression="execution(* com.demo.service..*.*(..))"/>  -->
+<!--         <aop:advisor pointcut-ref="allManagerMethod" advice-ref="chatAdvice"/>  -->
+<!--     </aop:config>   -->
+<!--     <aop:aspectj-autoproxy proxy-target-class="true"/> -->
+
+	
+</beans>
