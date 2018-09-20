@@ -9,10 +9,11 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.demo.quartz.dao.IQuartzJobDao;
 import com.demo.quartz.entity.JobInfo;
-
+@Repository
 public class QuartzJobDaoImpl implements IQuartzJobDao{
 
 	@Autowired

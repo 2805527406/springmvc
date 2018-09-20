@@ -15,23 +15,23 @@ import com.demo.quartz.entity.JobInfo;
 import com.demo.quartz.service.IQuartzJobMng;
 
 @Controller
-@RequestMapping("/quartz")
 public class QuartzAction {
-	@Autowired
-	private IQuartzJobMng quarzJonMng;
-	
-	@RequestMapping(value="/getList")
-	public ModelAndView getList(@RequestParam(value="keyword",required=false) String keyword) {
-		ModelAndView mav = new ModelAndView();
-		Map<String, String> params = new HashMap<String,String>();
-		if(StringUtils.isNotBlank(keyword)){
-			params.put("keyword", keyword);
-		}
-		System.out.println("进入");
-		List<JobInfo> list =  quarzJonMng.queryInfo(params);
-		mav.addObject("list", list);
-		mav.addObject("keyword",keyword);
-		return mav;
-	}
+//	@Autowired
+//	private IQuartzJobMng quarzJonMng;
+//	
+//	@RequestMapping(value="/quartz/getList")
+//	public ModelAndView getList(@RequestParam(value="keyword",required=false) String keyword) {
+//		ModelAndView mav = new ModelAndView();
+//		Map<String, String> params = new HashMap<String,String>();
+//		if(StringUtils.isNotBlank(keyword)){
+//			params.put("keyword", keyword);
+//		}
+//		System.out.println("进入");
+//		List<JobInfo> list =  quarzJonMng.queryInfo(params);
+//		mav.addObject("list", list);
+//		mav.addObject("keyword",keyword);
+//		mav.setViewName("hello");
+//		return mav;
+//	}
 	
 }

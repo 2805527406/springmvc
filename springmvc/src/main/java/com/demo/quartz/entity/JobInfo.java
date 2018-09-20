@@ -2,9 +2,11 @@ package com.demo.quartz.entity;
 
 import java.text.SimpleDateFormat;
 
+import org.springframework.stereotype.Component;
+
 import com.demo.quartz.service.TriggerState;
 
-
+@Component
 public class JobInfo {
 	  // µ÷¶ÈÆ÷Ãû³Æ
     private String sched_name;

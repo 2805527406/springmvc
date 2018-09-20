@@ -15,11 +15,12 @@ import org.quartz.impl.JobDetailImpl;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import com.demo.quartz.dao.IQuartzJobDao;
 import com.demo.quartz.entity.JobInfo;
 import com.demo.quartz.service.IQuartzJobMng;
-
+@Service
 public class QuartzJobMngImpl implements IQuartzJobMng{
 	@Autowired
 	@Qualifier("quartzScheduler")
