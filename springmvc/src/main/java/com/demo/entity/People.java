@@ -42,6 +42,25 @@ public class People implements Serializable{
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
+	/**
+	 * jsonData.put("bidPrice",quote.getSumPrice().substring(0,quote.getSumPrice().indexOf(".")+3)+"Ԫ");
+	 * @param args
+	 */
 	
+	public static void main(String[] args) {
+		String string="240.0";
+		System.out.println(string.indexOf("."));
+		if(string.indexOf(".")>0) {//
+			System.out.println(string.split(".")[1].length());
+			System.out.println(string.charAt(string.indexOf(".")+1));
+//			
+//			if()) {
+//				System.out.println(string.substring(0,string.indexOf(".")+3));
+//			}else {
+//				System.out.println(string);
+//			}
+		}
+//		System.out.println(string.substring(0,string.indexOf(".")+3));
+	}
 	
 }

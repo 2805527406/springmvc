@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:context="http://www.springframework.org/schema/context" 
+xmlns:mvc="http://www.springframework.org/schema/mvc" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd 
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd ">
+	<!-- 注解方式 -->
+	<aop:config proxy-target-class="true"/>
+	<bean class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="defaultSecurityManager"></property>
+	</bean>
+	
+	<!-- 编程方式 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="defaultSecurityManager"></property>
+		<property name="loginUrl" value="/shiro/toLogin" ></property>
+		<property name="unauthorizedUrl" value="403.html"></property>
+		<property name="filterChainDefinitions">
+			<value>
+			<!-- 过滤方式 anon(不需要任何认证)  authBasic(http认证访问) authc(认证后才能访问) user(当前用户存在才能访问) logout(退出)-->
+			<!-- 授权方式过滤器 perms(具备相关权限)  roles(具备角色) ssl(安全) port（端口）-->
+				/shiro/toLogin = anon <!-- 不验证进入登录页面 -->
+				/shiro/login = anon
+				/shiro/testRole3 = roleOr[admin]<!-- 自定义权限 -->
+				/shiro/role = roles[admin]
+				/shiro/testRole4 = roles["admin","admin1"]
+				/shiro/perms = perms["user:delete"]
+				/shiro/perms1 = perms["user:delete","user:update"]
+				/* = authc <!-- 验证 -->
+			</value>
+		</property>
+		<property name="filters"><!-- 自定义role过滤器 -->
+			<map>
+				<entry key="roleOr" value-ref="rolesFilter"></entry>
+			</map>
+		</property>
+	</bean>
+	<!-- 创建securityManager对象 -->
+	<bean id="defaultSecurityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="realm"></property>
+		<!-- session 会话管理 -->
+		<property name="sessionManager" ref="sessionManager"></property>
+		<property name="cacheManager" ref="redisCacheManager"></property>
+		<property name="rememberMeManager" ref="cookieRememberMeManaber"></property>
+	</bean>
+	<bean class="com.demo.shiro.realm.CustomRealm" id="realm">
+		<property name="credentialsMatcher" ref="hashedCredentialsMatcher"></property>
+	</bean>
+	
+	<!-- 设置加密 -->
+	<bean id="hashedCredentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="md5"></property><!-- 加密方式 -->
+		<property name="hashIterations" value="1"></property><!-- 加密次数 -->
+	</bean>
+	
+	<!-- 自定义role filter -->
+	<bean id="rolesFilter" class="com.demo.filter.RolesFilter"></bean>
+	
+	<!-- 默认 -->
+<!-- 	<bean class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager" id="sessionManager"> -->
+	<!-- 自定义 -->
+	<bean class="com.demo.shiro.CustomSessionManager" id="sessionManager">
+		<property name="sessionDAO" ref="redisSessionDao"></property>
+	</bean>
+	<bean class="com.demo.redis.RedisSessionDao" id="redisSessionDao">
+	</bean>
+	
+	<bean class="com.demo.shiro.RedisCacheManager" id="redisCacheManager"></bean>
+	
+	<!-- 自动登录 -->
+	<bean class="org.apache.shiro.web.mgt.CookieRememberMeManager" id="cookieRememberMeManaber">
+		<property name="cookie" ref="cookie"></property>
+	</bean>
+	
+	<bean class="org.apache.shiro.web.servlet.SimpleCookie" id="cookie">
+		<constructor-arg value="rememberMe"></constructor-arg>
+		<property name="maxAge" value="2000"></property>
+	</bean>
+</beans>

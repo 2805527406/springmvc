@@ -33,7 +33,7 @@ public class RedisUtil {
 	private Logger logger = Logger.getLogger(RedisUtil.class);
 
 	/**
-	 * ÅúÁ¿É¾³ý¶ÔÓ¦µÄvalue
+	 * ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½value
 	 * 
 	 * @param keys
 	 */
@@ -44,7 +44,7 @@ public class RedisUtil {
 	}
 
 	/**
-	 * ÅúÁ¿É¾³ýkey
+	 * ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½key
 	 * 
 	 * @param pattern
 	 */
@@ -55,7 +55,7 @@ public class RedisUtil {
 	}
 
 	/**
-	 * É¾³ý¶ÔÓ¦µÄvalue
+	 * É¾ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½value
 	 * 
 	 * @param key
 	 */
@@ -66,7 +66,7 @@ public class RedisUtil {
 	}
 
 	/**
-	 * ÅÐ¶Ï»º´æÖÐÊÇ·ñÓÐ¶ÔÓ¦µÄvalue
+	 * ï¿½Ð¶Ï»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ð¶ï¿½Ó¦ï¿½ï¿½value
 	 * 
 	 * @param key
 	 * @return
@@ -76,7 +76,7 @@ public class RedisUtil {
 	}
 
 	/**
-	 * ¶ÁÈ¡»º´æ
+	 * ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param key
 	 * @return
@@ -88,9 +88,9 @@ public class RedisUtil {
 		result = operations.get(key);
 		return result;
 	}
-
+	
 	/**
-	 * Ð´Èë»º´æ
+	 * Ð´ï¿½ë»ºï¿½ï¿½
 	 * 
 	 * @param key
 	 * @param value
@@ -108,9 +108,9 @@ public class RedisUtil {
 		}
 		return result;
 	}
-
+	
 	/**
-	 * Ð´Èë»º´æ
+	 * Ð´ï¿½ë»ºï¿½ï¿½
 	 * 
 	 * @param key
 	 * @param value
@@ -131,7 +131,7 @@ public class RedisUtil {
 	}
 	
 	/**
-	 * ÔÚlistÎ²²¿Ìí¼Ó
+	 * ï¿½ï¿½listÎ²ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param key
 	 * @param value
@@ -144,7 +144,7 @@ public class RedisUtil {
 	}
 	
 	/**
-	 * ÔÚlistÍ·²¿Ìí¼Ó
+	 * ï¿½ï¿½listÍ·ï¿½ï¿½ï¿½ï¿½ï¿½
 	 * 
 	 * @param key
 	 * @param value
@@ -157,7 +157,7 @@ public class RedisUtil {
 	}
 	
 	/**
-	 * »ñÈ¡listµÄlength
+	 * ï¿½ï¿½È¡listï¿½ï¿½length
 	 * 
 	 * @param key
 	 * @param value
@@ -176,7 +176,7 @@ public class RedisUtil {
 		return list;
 	}
 	/**
-	 * ¹þÏ£±íµÄ²Ù×÷
+	 * ï¿½ï¿½Ï£ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
 	 * @param key
 	 * @param hashKey
 	 * @param value
