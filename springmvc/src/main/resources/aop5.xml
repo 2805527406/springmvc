@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:context="http://www.springframework.org/schema/context" 
+xmlns:mvc="http://www.springframework.org/schema/mvc" 
+xmlns:tx="http://www.springframework.org/schema/tx" 
+xmlns:aop="http://www.springframework.org/schema/aop" 
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd 
+http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd 
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd ">
+	<!-- AOP自动代理 spring根据Bean名称来生成自动代理-->
+	<context:component-scan base-package="com.demo.aop"></context:component-scan>
+	<bean id="greetingAdvice" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor"><!-- 切面 -->
+		<!-- 通知 -->
+		<property name="advice" ref="greetingAroundAdvice"></property>
+		<!-- 切点 -->
+		<property name="pattern" value="com.demo.aop.program.GreetingImpl.good.*"></property>
+	</bean>
+	<!-- 　属性optimize意思是对代理生成策略是否优化，true表示如果目标类有接口则代理接口（JDK动态代理）
+	，如果没有则代理类（CGLib动态代理），这样便可以取代前面强制代理类的proxyTargetClass属性。 -->
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="optimize" value="true"></property>
+		<property name="beanNames" value="*Impl"></property>
+		<property name="interceptorNames" value="greetingAdvice"></property>
+		<property name=""></property>
+	</bean>	
+	<bean id="advice" class="com.demo.aop.introduction.LoveAdvice"></bean>
+		<bean id="greetingImpl" class="com.demo.aop.program.GreetingImpl"></bean>
+		<bean id="greetingAroundAdvice" class="com.demo.aop.program.GreetingAroundAdvice"/>
+</beans>

@@ -10,12 +10,22 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd 
 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd 
 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd ">
+	<!-- 基于正则表达式的SpringAOP切面类 -->
 	<context:component-scan base-package="com.demo.aop"></context:component-scan>
-	<bean id="greetingProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
-		<property name="interfaces" value="com.demo.aop.program.Greeting"></property><!-- 引入类 -->
-		<property name="target" ref="greetingImpl"></property><!-- 射入目标类对象 -->
-		<property name="interceptorNames" value="advice"></property><!-- 前置增强和后置增强 -->
+	<bean id="greetingAdvice" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor"><!-- 切面 -->
+		<!-- 通知 -->
+		<property name="advice" ref="greetingAroundAdvice"></property>
+		<!-- 切点 -->
+		<property name="pattern" value="com.demo.aop.program.GreetingImpl.good.*"></property>
 	</bean>
-	<bean id="advice" class="com.demo.aop.program.GreetingBeforAndAfterAdvice"></bean>
-	<bean id="greetingImpl" class="com.demo.aop.program.GreetingImpl"></bean>
+	
+	<bean id="greetingProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="interfaces" value="com.demo.aop.introduction.Love"></property><!-- 引入类 -->
+		<property name="target" ref="greetingImpl"></property><!-- 射入目标类对象 -->
+		<property name="interceptorNames" value="greetingAdvice"></property><!-- 切面 -->
+		<property name="proxyTargetClass" value="true"></property>
+	</bean>
+	<bean id="advice" class="com.demo.aop.introduction.LoveAdvice"></bean>
+		<bean id="greetingImpl" class="com.demo.aop.program.GreetingImpl"></bean>
+		<bean id="greetingAroundAdvice" class="com.demo.aop.program.GreetingAroundAdvice"/>
 </beans>
